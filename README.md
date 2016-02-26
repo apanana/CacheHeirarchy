@@ -22,6 +22,9 @@ L2:
 
 L3:
 
+####Offset:
+Since we used 64bit integers, we actually expect a shift of 2^3 (8 bytes) for all our data. In other words, when we were running on a buffer size of 2^10, the array was 2^10 64bit ints, each of which took up 2^3 (8) bytes. So the total space taken up by a buffer of 2^10 would actually be 2^13. We will examine the comparison of our data (with shifts taken into account) with the actual numbers taken from cpuid in the next section.
+
 ####Discrepencies - Prefetching and Whatnot
 The graph is clearly neither monotonous nor piecewise. We can speculate that the prefetcher might be doing something very unexpected at higher iteration numbers, but this seems unlikely since our access pattern is essentially random. However, we also would expected to see some gradations even as we move to buffer sizes that are larger than certain cache levels because the computer can still use the smaller cache if the random number specified in the array is small enough. For example if A[345] = 346, then the next iteration we go to A[346] which is very close and very fast, but this might occur on an array of buffer size 2^26. When we increase buffer size, it is more likely that we are picking numbers outside of the cache size, which is why we see the increases in runtime, but there will still be some speedups caused by accesses to the faster caches in specific iterations. Also this could explain why at very high iteration numbers we see the average dip down, because we might see the signal from close accesses grow faster than signal from slow accesses, and this might cause the average to dip down as we saw.
 
