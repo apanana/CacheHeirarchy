@@ -23,4 +23,4 @@ How these compare with our estimates:
 
 
 ####Comparison of Times
-How our results compare against norvig.com:
+The performance numbers we measured are similar to the slides in class (page 5 of Memory Hierachy Slides). We compare our results to the slides rather than from http://norvig.com/21-days.html#answers due to the website having a table of more dated cache access times. To restate the access times from class, we have a fetch time of 1-2 ns latency for L1, 3-5 ns latency for L2, and 7-12 latency for L3, and 60-90 ns latency for Dram which is main memory. While our graph shows the jumps from L1 to L2 and L2 to L3 clearly, the jump to main memory becomes a little unclear.
