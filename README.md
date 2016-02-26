@@ -17,11 +17,13 @@ Just to be sure that nothing totally wierd is happening, we run each specified b
 ![alt tag](https://github.com/apanana/CacheHeirarchy/blob/master/Graph.png)
 ####Interpretation:
 L1:
+We see an increase in runtime around 2^10-12
 
 L2:
+We see an increase in runtime around 2^14-15
 
 L3:
-
+We see an increase in runtime around around 2^18-19
 ####Offset:
 Since we used 64bit integers, we actually expect a shift of 2^3 (8 bytes) for all our data. In other words, when we were running on a buffer size of 2^10, the array was 2^10 64bit ints, each of which took up 2^3 (8) bytes. So the total space taken up by a buffer of 2^10 would actually be 2^13. We will examine the comparison of our data (with shifts taken into account) with the actual numbers taken from cpuid in the next section.
 
@@ -36,10 +38,15 @@ These are the results from calling inline cpuid:
 ####L3: 10485kb
 For more details, check cache_asm.txt 
 
-How these compare with our estimates:
-Our guess for L1:
-Our guess for L2:
-Our guess for L3:
+Taking into account the shift of 2^3, our guesses for L1, L2, L3 were all very close to the expected. 
+L1:
+With shift, our expected was around 2^13-2^15. For L1 to L2 it is hard to tell where the shift happens because the runtimes are so fast that even a little bit of signal is significant.
+
+L2:
+With shift, our expected was around 2^17-18
+
+L3:
+With shift, our expected was around 2^21-22. We expect this to be greater than the actual because, as discussed earlier, we can still use lower cache levels even when our buffer size exceeds the cache size. At 2^21, 50% of the calls can still fall within L3 cache.
 
 ##Comparison of Times
 The performance numbers we measured are similar to the slides in class (page 5 of Memory Hierachy Slides). We compare our results to the slides rather than from http://norvig.com/21-days.html#answers due to the website having a table of more dated cache access times. To restate the access times from class, we have a fetch time of 1-2 ns latency for L1, 3-5 ns latency for L2, and 7-12 latency for L3, and 60-90 ns latency for Dram which is main memory. While our graph shows the jumps from L1 to L2 and L2 to L3 clearly, the jump to main memory becomes a little unclear.
